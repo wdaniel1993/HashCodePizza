@@ -55,7 +55,7 @@ namespace HashCodePizza.Process
             var reinsertion = new EliteIncludeParentsReinsertion(fitness);
             var currentBest = new PizzaCutterChromosome(orderedSlices.Count, (input.Rows*input.Columns) / (input.MinToppings* toppingCount));
             currentBest.Fitness = fitness.Evaluate(currentBest);
-            var population = new Population(10, 40, currentBest);
+            var population = new Population(10, 20, currentBest);
 
             
 
