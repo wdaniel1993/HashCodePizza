@@ -26,13 +26,6 @@ namespace HashCodePizza
 
             var output = dataProcessor.Process(input);
 
-            output.Slices = new List<Slice>()
-            {
-                new Slice(0,0,2,1),
-                new Slice(0,2,2,2),
-                new Slice(0,3,2,4)
-            };
-
             outputWriter.Write(output, Path.Combine(dataPath, "solution.out"));
         }
     }
