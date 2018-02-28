@@ -42,11 +42,11 @@ namespace HashCodePizza.Process
 
             var orderedSlices = validSlices.ToList();
 
-            var mutationRate = 1f;
-            var crossOverRate = 1f;
+            var mutationRate = 0.5f;
+            var crossOverRate = 0.75f;
             
             var fitness = new PizzaCutterFitness(input,orderedSlices);
-            var selection = new EliteSelection();
+            var selection = new TournamentSelection(5);
             var crossOver = new UniformCrossover();
             var mutation = new FlipBitMutation();
             var reinsertion = new ElitistReinsertion();
@@ -57,7 +57,7 @@ namespace HashCodePizza.Process
             var ga = new GeneticAlgorithm(population, fitness, selection, crossOver, mutation)
             {
                 Reinsertion = reinsertion,
-                Termination = new FitnessStagnationTermination(20),
+                Termination = new FitnessStagnationTermination(),
                 CrossoverProbability = crossOverRate,
                 MutationProbability = mutationRate,
                 TaskExecutor = new SmartThreadPoolTaskExecutor()
