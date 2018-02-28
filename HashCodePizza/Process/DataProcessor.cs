@@ -8,6 +8,7 @@ using GeneticSharp.Domain;
 using GeneticSharp.Domain.Crossovers;
 using GeneticSharp.Domain.Mutations;
 using GeneticSharp.Domain.Populations;
+using GeneticSharp.Domain.Randomizations;
 using GeneticSharp.Domain.Reinsertions;
 using GeneticSharp.Domain.Selections;
 using GeneticSharp.Domain.Terminations;
@@ -44,7 +45,9 @@ namespace HashCodePizza.Process
 
             var mutationRate = 1f;
             var crossOverRate = 1f;
-            
+
+            RandomizationProvider.Current = new FastRandomRandomization();
+
             var fitness = new PizzaCutterFitness(input,orderedSlices);
             var selection = new EliteSelection();
             var crossOver = new EvolutionStrategyCrossOver();
@@ -53,6 +56,8 @@ namespace HashCodePizza.Process
             var currentBest = new PizzaCutterChromosome(orderedSlices.Count, (input.Rows*input.Columns) / (input.MinToppings* toppingCount));
             currentBest.Fitness = fitness.Evaluate(currentBest);
             var population = new Population(10, 40, currentBest);
+
+            
 
             var ga = new GeneticAlgorithm(population, fitness, selection, crossOver, mutation)
             {
@@ -64,7 +69,7 @@ namespace HashCodePizza.Process
                 {
                     MinThreads = Environment.ProcessorCount,
                     MaxThreads = Environment.ProcessorCount
-                },
+                }
             };
 
 

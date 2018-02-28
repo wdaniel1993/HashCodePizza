@@ -21,7 +21,7 @@ namespace HashCodePizza.Genetics
                 ReplaceGene(i, new Gene(0));
             }
 
-            var indices = RandomizationProvider.Current.GetUniqueInts(maxSlices, 0, length);
+            var indices = RandomizationProvider.Current.GetInts(maxSlices, 0, length);
             foreach (var index in indices)
             {
                 ReplaceGene(index, new Gene(1));
