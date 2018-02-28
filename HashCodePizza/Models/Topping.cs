@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace HashCodePizza.Models
 {
-    public class OutputModel
+    public enum Topping
     {
-        public List<Slice> Slices { get; set; }
+        Tomato,
+        Mushroom
     }
 }
