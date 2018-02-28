@@ -22,7 +22,7 @@ namespace HashCodePizza
             var outputWriter = new OutputWriter();
             var dataProcessor = new DataProcessor();
 
-            var input = inputReader.Read(Path.Combine(dataPath, "small.in"));
+            var input = inputReader.Read(Path.Combine(dataPath, "big.in"));
 
             var output = dataProcessor.Process(input);
 

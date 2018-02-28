@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Genetics\EliteIncludeParentsReinsertion.cs" />
     <Compile Include="Genetics\EvolutionStrategyCrossOver.cs" />
     <Compile Include="Genetics\PizzaCutterChromosome.cs" />
     <Compile Include="Genetics\PizzaCutterFitness.cs" />

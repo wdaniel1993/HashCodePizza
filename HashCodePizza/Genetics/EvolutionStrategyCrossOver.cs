@@ -16,7 +16,7 @@ namespace HashCodePizza.Genetics
 
         protected override IList<IChromosome> PerformCross(IList<IChromosome> parents)
         {
-            return parents;
+            return parents.Select(x => x.Clone()).ToList();
         }
     }
 }
