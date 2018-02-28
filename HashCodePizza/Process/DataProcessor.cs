@@ -4,6 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GeneticSharp.Domain;
+using GeneticSharp.Domain.Crossovers;
+using GeneticSharp.Domain.Mutations;
+using GeneticSharp.Domain.Populations;
+using GeneticSharp.Domain.Reinsertions;
+using GeneticSharp.Domain.Selections;
+using GeneticSharp.Domain.Terminations;
+using GeneticSharp.Infrastructure.Threading;
+using HashCodePizza.Genetics;
 using HashCodePizza.Models;
 
 namespace HashCodePizza.Process
@@ -30,7 +39,50 @@ namespace HashCodePizza.Process
                 }
             });
 
-            var output = new OutputModel();
+            var orderedSlices = validSlices.ToList();
+
+            var mutationRate = 1f;
+            var crossOverRate = 1f;
+            
+            var fitness = new PizzaCutterFitness(input,orderedSlices);
+            var selection = new EliteSelection();
+            var crossOver = new UniformCrossover();
+            var mutation = new FlipBitMutation();
+            var reinsertion = new ElitistReinsertion();
+            var currentBest = new PizzaCutterChromosome(orderedSlices.Count, true);
+            currentBest.Fitness = fitness.Evaluate(currentBest);
+            var population = new Population(20, 40, currentBest);
+
+            var ga = new GeneticAlgorithm(population, fitness, selection,crossOver,mutation)
+            {
+                Reinsertion = reinsertion,
+                Termination = new OrTermination(
+                    new GenerationNumberTermination(200),
+                    new FitnessStagnationTermination(20)),
+                CrossoverProbability = crossOverRate,
+                MutationProbability = mutationRate,
+            };
+
+            ga.TaskExecutor = new SmartThreadPoolTaskExecutor()
+            {
+                MinThreads = Environment.ProcessorCount,
+                MaxThreads = Environment.ProcessorCount
+            };
+
+            ga.GenerationRan += (sender, args) =>
+            {
+                if (ga.BestChromosome.Fitness > currentBest.Fitness)
+                {
+                    currentBest = ga.BestChromosome.Clone() as PizzaCutterChromosome;
+                }
+            };
+
+            ga.Start();
+
+            var output = new OutputModel()
+            {
+                Slices = currentBest.GetSlices(orderedSlices).ToList()
+            };
 
             return output;
         }

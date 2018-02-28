@@ -66,6 +66,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Genetics\PizzaCutterChromosome.cs" />
+    <Compile Include="Genetics\PizzaCutterFitness.cs" />
     <Compile Include="Input\InputReader.cs" />
     <Compile Include="Models\InputModel.cs" />
     <Compile Include="Models\OutputModel.cs" />
@@ -93,8 +95,6 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Genetics\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
