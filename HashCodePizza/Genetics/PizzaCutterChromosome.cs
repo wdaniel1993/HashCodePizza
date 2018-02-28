@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GeneticSharp.Domain.Chromosomes;
+using GeneticSharp.Domain.Randomizations;
 using HashCodePizza.Models;
 
 namespace HashCodePizza.Genetics
@@ -11,24 +12,25 @@ namespace HashCodePizza.Genetics
     [Serializable]
     public sealed class PizzaCutterChromosome : BinaryChromosomeBase
     {
-        public PizzaCutterChromosome(int length, bool blank = false) : base(length)
+        private readonly int _maxSlices;
+        public PizzaCutterChromosome(int length, int maxSlices) : base(length)
         {
-            if (blank)
+            _maxSlices = maxSlices;
+            for (int i = 0; i < length; i++)
             {
-                for (int i = 0; i < length; i++)
-                {
-                    ReplaceGene(i, new Gene(0));
-                }
+                ReplaceGene(i, new Gene(0));
             }
-            else
+
+            var indices = RandomizationProvider.Current.GetUniqueInts(maxSlices, 0, length);
+            foreach (var index in indices)
             {
-                CreateGenes();
+                ReplaceGene(index, new Gene(1));
             }
         }
 
         public override IChromosome CreateNew()
         {
-            return new PizzaCutterChromosome(Length,true);
+            return new PizzaCutterChromosome(Length,_maxSlices);
         }
 
         public IEnumerable<Slice> GetSlices(List<Slice> slices)

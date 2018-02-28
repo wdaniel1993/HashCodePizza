@@ -21,7 +21,8 @@ namespace HashCodePizza.Process
     {
         public OutputModel Process(InputModel input)
         {
-            var sliceMasks = GeneratePossibleSliceMasks(input.MinToppings*Enum.GetValues(typeof(Topping)).Length,input.MaxCells).ToList();
+            var toppingCount = Enum.GetValues(typeof(Topping)).Length;
+            var sliceMasks = GeneratePossibleSliceMasks(input.MinToppings*toppingCount,input.MaxCells).ToList();
             var validSlices = new ConcurrentBag<Slice>();
 
             Parallel.ForEach(sliceMasks, mask =>
@@ -49,25 +50,23 @@ namespace HashCodePizza.Process
             var crossOver = new UniformCrossover();
             var mutation = new FlipBitMutation();
             var reinsertion = new ElitistReinsertion();
-            var currentBest = new PizzaCutterChromosome(orderedSlices.Count, true);
+            var currentBest = new PizzaCutterChromosome(orderedSlices.Count, (input.Rows*input.Columns) / (input.MinToppings* toppingCount));
             currentBest.Fitness = fitness.Evaluate(currentBest);
-            var population = new Population(20, 40, currentBest);
+            var population = new Population(10, 40, currentBest);
 
-            var ga = new GeneticAlgorithm(population, fitness, selection,crossOver,mutation)
+            var ga = new GeneticAlgorithm(population, fitness, selection, crossOver, mutation)
             {
                 Reinsertion = reinsertion,
-                Termination = new OrTermination(
-                    new GenerationNumberTermination(200),
-                    new FitnessStagnationTermination(20)),
+                Termination = new FitnessStagnationTermination(20),
                 CrossoverProbability = crossOverRate,
                 MutationProbability = mutationRate,
+                TaskExecutor = new SmartThreadPoolTaskExecutor()
+                {
+                    MinThreads = Environment.ProcessorCount,
+                    MaxThreads = Environment.ProcessorCount
+                },
             };
 
-            ga.TaskExecutor = new SmartThreadPoolTaskExecutor()
-            {
-                MinThreads = Environment.ProcessorCount,
-                MaxThreads = Environment.ProcessorCount
-            };
 
             ga.GenerationRan += (sender, args) =>
             {

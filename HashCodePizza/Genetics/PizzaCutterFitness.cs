@@ -27,6 +27,7 @@ namespace HashCodePizza.Genetics
         {
             var pizza = new int[_inputModel.Rows, _inputModel.Columns];
             var score = 0;
+            var penalty = 0;
             var slices = (chromosome as PizzaCutterChromosome)?.GetSlices(_slices) ?? new List<Slice>();
             foreach (var slice in slices)
             {
@@ -40,12 +41,21 @@ namespace HashCodePizza.Genetics
                 score++;
             }
 
+            var everythingValid = true;
             foreach (var cell in pizza)
             {
-                score -= Math.Abs(cell - 1)*2;
+                if (cell == 0)
+                {
+                    penalty += 2;
+                }
+                else if(cell > 1)
+                {
+                    penalty += (cell-1) * 3;
+                    everythingValid = false;
+                }
             }
 
-            return score;
+            return everythingValid ? score*10 : score - penalty;
         }
     }
 }
