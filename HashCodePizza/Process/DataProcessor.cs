@@ -13,7 +13,7 @@ namespace HashCodePizza.Process
         public OutputModel Process(InputModel input)
         {
             var sliceMasks = GeneratePossibleSliceMasks(input.MinToppings*Enum.GetValues(typeof(Topping)).Length,input.MaxCells).ToList();
-            var possibleSlices = new ConcurrentBag<Slice>();
+            var validSlices = new ConcurrentBag<Slice>();
 
             Parallel.ForEach(sliceMasks, mask =>
             {
@@ -24,7 +24,7 @@ namespace HashCodePizza.Process
                         var slice = new Slice(i,j,i+mask.Width,j+mask.Height);
                         if (IsValidSlice(input,slice))
                         {
-                            possibleSlices.Add(slice);
+                            validSlices.Add(slice);
                         }
                     }
                 }
