@@ -70,6 +70,7 @@
     <Compile Include="Models\InputModel.cs" />
     <Compile Include="Models\OutputModel.cs" />
     <Compile Include="Models\Slice.cs" />
+    <Compile Include="Models\SliceMask.cs" />
     <Compile Include="Models\Topping.cs" />
     <Compile Include="Output\OutputWriter.cs" />
     <Compile Include="Process\DataProcessor.cs" />
