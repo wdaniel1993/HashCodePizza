@@ -42,6 +42,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Input\InputReader.cs" />
+    <Compile Include="Models\InputModel.cs" />
+    <Compile Include="Models\OutputModel.cs" />
+    <Compile Include="Output\OutputWriter.cs" />
+    <Compile Include="Process\DataProcessor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
