@@ -42,12 +42,12 @@ namespace HashCodePizza.Process
 
             var orderedSlices = validSlices.ToList();
 
-            var mutationRate = 0.5f;
-            var crossOverRate = 0.75f;
+            var mutationRate = 1f;
+            var crossOverRate = 1f;
             
             var fitness = new PizzaCutterFitness(input,orderedSlices);
-            var selection = new TournamentSelection(5);
-            var crossOver = new UniformCrossover();
+            var selection = new EliteSelection();
+            var crossOver = new EvolutionStrategyCrossOver();
             var mutation = new FlipBitMutation();
             var reinsertion = new ElitistReinsertion();
             var currentBest = new PizzaCutterChromosome(orderedSlices.Count, (input.Rows*input.Columns) / (input.MinToppings* toppingCount));
